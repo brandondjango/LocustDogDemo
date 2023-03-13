@@ -2,15 +2,18 @@
 import dog_api_util
 from locust import HttpUser, task
 
-class DogCaller(HttpUser):
+from dog_user_taskset import DogUserTaskSet, DogUserSequentialTaskSet
 
-    #def __init__(self):
-    #    self.random_dog_breed_request = dog_api_util.DogApiBuilderUtil().build_random_dog_breed_request()
 
-    @task
-    def breeds_list(self):
-        self.client.get("/breeds/list/all")
+class DogUser(HttpUser):
 
-    #@task
-    #def random_dog_request(self):
-    #    self.client.get(self.random_dog_breed_request)
+    host = "https://dog.ceo/api/"
+    tasks = [DogUserTaskSet, DogUserSequentialTaskSet]
+    def on_start(self):
+        print("Start User Action")
+
+    def on_stop(self):
+        print("Ending User Action")
+
+
+

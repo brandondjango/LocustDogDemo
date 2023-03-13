@@ -2,51 +2,40 @@
 import json
 import requests
 import random
-
-class DogApiBuilderUtil:
-
-    def __init__(self):
-        api_base_url = "https://dog.ceo/api/"
-
-
-    @classmethod
-    def build_random_dog_breed_request(cls):
-        breeds_response = DogApiCaller.get_breeds_list()
-        breed_json = breeds_response.json()
-        breeds_dict = breed_json["message"]
-        breeds_list = list(breed_json["message"].keys())
-        random_breed = random.choice(breeds_list)
-
-        if breeds_dict[random_breed]:
-            sub_breed_list = list(breeds_dict[random_breed].keys())
-            random_breed = random.choice(sub_breed_list)
-
-        request_url = "https://dog.ceo/api/breed/" + random_breed + "/images/random"
-        return request_url
-
+import json
 
 
 class DogApiCaller:
 
     def __init__(self):
-        pass
+        with open('ListOfDogBreeds.json','r') as file:
+            json_file_content = file.read()
+        self.breed_list_json = json.loads(json_file_content)
 
-    @classmethod
-    def make_request(cls, url):
+    def make_request(self, url):
         response = requests.get(url)
 
-    @classmethod
-    def get_breeds_list(cls):
+    def get_breeds_list_response(self):
         response = requests.get("https://dog.ceo/api/breeds/list/all")
         return response
 
-    @classmethod
-    def make_random_breed_image_request(cls):
-        random_dog_breed_request = DogApiBuilderUtil().build_random_dog_breed_request()
-        cls.make_request(random_dog_breed_request)
+    def get_full_breed_list(self):
+        #breeds_response = self.get_breeds_list_response()
+        #breed_json = breeds_response.json()
+        breed_json = self.breed_list_json
+        breeds_dict = breed_json['message']
+        breeds_list = list(breed_json["message"].keys())
+        for breed in breeds_list:
+            if breeds_dict[breed]:
+                sub_breed_list = breeds_dict[breed]
+                breeds_list = breeds_list + sub_breed_list
+        return breeds_list
+
+    def build_random_dog_breed_request(self):
+        random_breed = random.choice(self.get_full_breed_list())
+        request_url = "breed/" + random_breed + "/images/random"
+        return request_url
 
 
 
-dog_api_builder = DogApiBuilderUtil().build_random_dog_breed_request()
-print(dog_api_builder)
 
