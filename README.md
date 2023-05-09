@@ -6,29 +6,27 @@ Please do not use this to actually load test their API.
 ## Requirements
 
 Python(This project was made using version 3.11)
-Locust(This project was made using version 2.15)
+Dependencies in requirements.txt(install using pip)
 
-To install Locust, you can use the command:
+To install dependencies after Python is installed:
 
-    pip3 install locust
+    pip install -r requirements.txt
 
-To confirm installation:
+To confirm installation of locust(you may need to add Locust to your path):
 
     locust -V
 
-## Concepts
+## Run Project
 
-### Users
+To run the project use:
 
-[Users Documentation](https://docs.locust.io/en/stable/api.html#user-class)
+    locust.exe -f .\locust_dog_demo.py
 
-Users are the "locusts" that perform load tests in your locust test.
+This will start a server on your localhost(default port is 8089, http://0.0.0.0:8089).
 
-Users are assigned Tasks to perform. Over the course of a locust test, Users are spawned at a rate determined by the test runner, and Users will automatically select tasks to run.
+From here you can choose your user max number of users and users spawn rate.
 
-Furthermore, Locust provides a HttpUser class and a FastHttpUser class.  These built in classes come with http clients that can make http calls for you. In addition, they support cookies, and therefore keeps the session between HTTP requests.
+**KEEP THIS LOW. DO NOT RUN A DOS ATTACK ON THE DOG API**
 
-Within an HttpUser for example, you can perform a http call like so:
-
-    client.get("samplecall")
+Then start the test!
 
